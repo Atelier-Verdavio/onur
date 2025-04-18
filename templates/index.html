@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DHT11 Sensör Verileri</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .sensor-data { 
+            font-size: 24px; 
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>DHT11 Sensör Verileri</h1>
+    <div class="sensor-data">
+        Sıcaklık: <span id="temp">--</span> °C
+    </div>
+    <div class="sensor-data">
+        Nem: <span id="hum">--</span> %
+    </div>
+
+    <script>
+        function updateData() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        document.getElementById('temp').textContent = data[0]['Sıcaklık (°C)'];
+                        document.getElementById('hum').textContent = data[0]['Nem (%)'];
+                    }
+                })
+                .catch(error => console.error('Hata:', error));
+        }
+
+        // Her 2 saniyede bir güncelle
+        setInterval(updateData, 2000);
+        // Sayfa yüklendiğinde ilk veriyi al
+        updateData();
+    </script>
+</body>
+</html> 
